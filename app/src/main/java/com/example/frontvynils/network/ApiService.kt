@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import com.example.frontvynils.models.Album
 
 interface ApiService {
-    @GET("f4b4dc09-f74d-4e38-a45a-8f628ea536be")
+    @GET("4a00198c-6b74-452c-b726-c0a6944381bc")
     //@GET("albums")
     suspend fun getAllAlbums(): List<Album>
 }

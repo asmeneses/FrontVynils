@@ -64,8 +64,6 @@ fun MainScreen() {
         bottomBar = { MenuBar(navController) },
         backgroundColor = mainColor
     ) {
-        var albumViewModel: AlbumViewModel = AlbumViewModel();
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,7 +86,7 @@ fun MainScreen() {
         }
 
         NavHost(navController, startDestination = "albums") {
-            composable("albums") { AlbumsView(albumViewModel = albumViewModel) }
+            composable("albums") { AlbumsView(albumViewModel = AlbumViewModel()) }
             composable("artists") { ArtistsView() }
             composable("collectors") { CollectorsView() }
             composable("songs") { SongsView() }

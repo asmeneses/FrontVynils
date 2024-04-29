@@ -49,7 +49,7 @@ fun AlbumItem(album: Album) {
     ) {
         AsyncImage(
             model = album.cover,
-            contentDescription = album.description,
+            contentDescription = album.name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .heightIn(min = 150.dp, max = 150.dp)

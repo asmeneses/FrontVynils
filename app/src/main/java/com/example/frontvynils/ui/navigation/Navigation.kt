@@ -71,7 +71,7 @@ fun MainScreen() {
             Arrangement.SpaceBetween,
         ) {
             Button(
-                onClick = { },
+                onClick = {navController.navigate("AlbumsCreate") },
                 colors = buttonStyle
             ) {
                 Icon(Icons.Rounded.Search, contentDescription = "")

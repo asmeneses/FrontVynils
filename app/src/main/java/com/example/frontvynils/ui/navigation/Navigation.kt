@@ -41,6 +41,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
+import com.example.frontvynils.ui.viewmodel.CollectorViewModel
 import com.example.frontvynils.ui.views.AlbumsView
 import com.example.frontvynils.ui.views.ArtistsView
 import com.example.frontvynils.ui.views.CollectorsView
@@ -88,7 +89,7 @@ fun MainScreen() {
         NavHost(navController, startDestination = "albums") {
             composable("albums") { AlbumsView(albumViewModel = AlbumViewModel()) }
             composable("artists") { ArtistsView() }
-            composable("collectors") { CollectorsView() }
+            composable("collectors") { CollectorsView(collectorViewModel = CollectorViewModel()) }
             composable("songs") { SongsView() }
         }
     }

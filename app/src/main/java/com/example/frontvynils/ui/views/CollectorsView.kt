@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,6 +41,33 @@ fun CollectorsView(collectorViewModel: CollectorViewModel) {
 
 @Composable
 fun CollectorItem(collector: Collector) {
+    Surface(
+        color = Color.LightGray,
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = collector.name,
+                fontSize = 20.sp,
+                color = Color.Black,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            )
+        }
+    }
+}
+
+/*@Composable
+fun CollectorItem(collector: Collector) {
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -56,4 +85,4 @@ fun CollectorItem(collector: Collector) {
                 .padding(top = 2.dp)
         )
     }
-}
+}*/

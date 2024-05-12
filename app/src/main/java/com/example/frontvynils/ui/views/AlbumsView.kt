@@ -1,5 +1,6 @@
 package com.example.frontvynils.ui.views
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,13 +20,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.frontvynils.models.Album
-import com.example.frontvynils.ui.viewmodel.AlbumViewModel
+import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
 
 @Composable
-fun AlbumsView(albumViewModel: AlbumViewModel) {
-    val albums = albumViewModel.albums.value
+fun AlbumsView(navController: NavController, albumsViewModel: AlbumsViewModel) {
+    val albums = albumsViewModel.albums.value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -35,17 +37,23 @@ fun AlbumsView(albumViewModel: AlbumViewModel) {
         modifier = Modifier.padding(top = 70.dp, bottom = 75.dp)
     ) {
         items(albums) { album ->
-            AlbumItem(album)
+            AlbumItem(
+                album,
+                onClick = {
+                    navController.navigate("albums/${album.id}")
+                }
+            )
         }
     }
 }
 
 @Composable
-fun AlbumItem(album: Album) {
+fun AlbumItem(album: Album, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(10.dp)
             .width(150.dp)
+            .clickable(onClick = onClick)
     ) {
         AsyncImage(
             model = album.cover,

@@ -22,7 +22,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,37 +31,36 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.frontvynils.repository.IAlbumRepository
+import com.example.frontvynils.ui.theme.MainButtonColors
+import com.example.frontvynils.ui.theme.MainColor
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
+import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
+import com.example.frontvynils.ui.views.AlbumView
 import com.example.frontvynils.ui.views.AlbumsView
 import com.example.frontvynils.ui.views.ArtistsView
 import com.example.frontvynils.ui.views.CollectorsView
 import com.example.frontvynils.ui.views.SongsView
 
-var mainColor = Color(48, 62, 88);
-
-var buttonStyle = ButtonColors(
-    containerColor = Color(217, 217, 217),
-    disabledContainerColor = Color(117, 117, 117),
-    contentColor = Color.Black,
-    disabledContentColor = Color.Black
-);
-
-@Preview
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    albumRepository: IAlbumRepository
+) {
     val navController = rememberNavController()
+
     Scaffold(
         bottomBar = { MenuBar(navController) },
-        backgroundColor = mainColor
+        backgroundColor = MainColor
     ) {
         Row(
             modifier = Modifier
@@ -72,21 +70,38 @@ fun MainScreen() {
         ) {
             Button(
                 onClick = { },
-                colors = buttonStyle
+                colors = MainButtonColors
             ) {
                 Icon(Icons.Rounded.Search, contentDescription = "")
             }
 
             Button(
                 onClick = { },
-                colors = buttonStyle
+                colors = MainButtonColors
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = "")
             }
         }
 
         NavHost(navController, startDestination = "albums") {
-            composable("albums") { AlbumsView(albumViewModel = AlbumViewModel()) }
+            var albumsViewModel = AlbumsViewModel(albumRepository)
+
+            composable("albums") {
+                AlbumsView(navController, albumsViewModel = albumsViewModel)
+            }
+
+            composable(
+                "albums/{albumId}",
+                arguments = listOf(navArgument("albumId") { type = NavType.IntType })) {
+                AlbumView(
+                    navController = navController,
+                    albumViewModel = AlbumViewModel(
+                        albumRepository,
+                        it.arguments?.getInt("albumId")!!
+                    )
+                )
+            }
+
             composable("artists") { ArtistsView() }
             composable("collectors") { CollectorsView() }
             composable("songs") { SongsView() }
@@ -96,7 +111,7 @@ fun MainScreen() {
 
 @Composable
 fun MenuBar(navController: NavHostController) {
-    var selectedItem by remember { mutableStateOf(0) };
+    var selectedItem by remember { mutableStateOf(0) }
 
     val items = listOf(
         "albums" to "Albums",
@@ -119,8 +134,8 @@ fun MenuBar(navController: NavHostController) {
                     text = name,
                     isSelected = selectedItem == index,
                     onClick = {
-                        selectedItem = index;
-                        navController.navigate(route);
+                        selectedItem = index
+                        navController.navigate(route)
                     }
                 )
             }
@@ -136,13 +151,16 @@ fun MenuItem(text: String, isSelected: Boolean, onClick: () -> Unit) {
         modifier = Modifier
             .padding(4.dp)
             .clickable(onClick = onClick)
-            .background(color = if (isSelected) mainColor else Color.White, shape = RoundedCornerShape(percent = 50)),
+            .background(
+                color = if (isSelected) MainColor else Color.White,
+                shape = RoundedCornerShape(percent = 50)
+            ),
     ) {
         Icon(
             Icons.Rounded.AddCircle,
             contentDescription = if (isSelected) text else "",
             modifier = Modifier.padding(8.dp),
-            tint = if (isSelected) Color.White else mainColor
+            tint = if (isSelected) Color.White else MainColor
         )
 
         AnimatedVisibility(

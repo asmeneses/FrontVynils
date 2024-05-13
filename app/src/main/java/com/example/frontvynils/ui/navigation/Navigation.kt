@@ -43,8 +43,10 @@ import androidx.navigation.navArgument
 import com.example.frontvynils.repository.IAlbumRepository
 import com.example.frontvynils.ui.theme.MainButtonColors
 import com.example.frontvynils.ui.theme.MainColor
+import com.example.frontvynils.ui.viewmodel.AlbumCreateViewModel
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
 import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
+import com.example.frontvynils.ui.views.AlbumCreateView
 import com.example.frontvynils.ui.views.AlbumView
 import com.example.frontvynils.ui.views.AlbumsView
 import com.example.frontvynils.ui.views.ArtistsView
@@ -76,7 +78,9 @@ fun MainScreen(
             }
 
             Button(
-                onClick = { },
+                onClick = {
+                      navController.navigate("createAlbum")
+                },
                 colors = MainButtonColors
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = "")
@@ -86,12 +90,12 @@ fun MainScreen(
         NavHost(navController, startDestination = "albums") {
             var albumsViewModel = AlbumsViewModel(albumRepository)
 
-            composable("albums") {
+            composable(route = "albums") {
                 AlbumsView(navController, albumsViewModel = albumsViewModel)
             }
 
             composable(
-                "albums/{albumId}",
+                route = "albums/{albumId}",
                 arguments = listOf(navArgument("albumId") { type = NavType.IntType })) {
                 AlbumView(
                     navController = navController,
@@ -99,6 +103,13 @@ fun MainScreen(
                         albumRepository,
                         it.arguments?.getInt("albumId")!!
                     )
+                )
+            }
+
+            composable(route = "createAlbum") {
+                AlbumCreateView(
+                    navController = navController,
+                    model = AlbumCreateViewModel(albumRepository)
                 )
             }
 

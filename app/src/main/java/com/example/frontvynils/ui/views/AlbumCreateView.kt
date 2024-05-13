@@ -105,12 +105,6 @@ fun AlbumCreateView(navController: NavController, model: AlbumCreateViewModel) {
             }
         }
 
-        // Record Label
-        // [Sony Music, EMI, Discos Fuentes, Elektra, Fania Records]
-
-        // Genre
-        // [Classical, Salsa, Rock, Folk]
-
         InputText(fieldName = "Artista", label = "Ingrese el nombre del artista", textFieldValue = albumNameState)
         InputText(fieldName = "Fecha Grabación", label = "Ingrese la fecha de grabación", textFieldValue = recordDateState)
         InputText(fieldName = "Fecha Lanzamiento", label = "Ingrese la fecha de lanzamiento", textFieldValue = launchDateState)

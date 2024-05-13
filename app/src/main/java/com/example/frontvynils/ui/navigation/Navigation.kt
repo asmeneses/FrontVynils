@@ -34,6 +34,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -45,6 +46,7 @@ import com.example.frontvynils.ui.theme.MainButtonColors
 import com.example.frontvynils.ui.theme.MainColor
 import com.example.frontvynils.ui.viewmodel.AlbumCreateViewModel
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
+import com.example.frontvynils.ui.viewmodel.CollectorViewModel
 import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
 import com.example.frontvynils.ui.views.AlbumCreateView
 import com.example.frontvynils.ui.views.AlbumView
@@ -59,6 +61,7 @@ fun MainScreen(
     albumRepository: IAlbumRepository
 ) {
     val navController = rememberNavController()
+    var viewIndex = 1
 
     Scaffold(
         bottomBar = { MenuBar(navController) },
@@ -79,7 +82,9 @@ fun MainScreen(
 
             Button(
                 onClick = {
-                      navController.navigate("createAlbum")
+                    when (viewIndex) {
+                        1 -> navController.navigate("createAlbum")
+                    }
                 },
                 colors = MainButtonColors
             ) {
@@ -91,6 +96,7 @@ fun MainScreen(
             var albumsViewModel = AlbumsViewModel(albumRepository)
 
             composable(route = "albums") {
+                viewIndex = 1
                 AlbumsView(navController, albumsViewModel = albumsViewModel)
             }
 
@@ -113,9 +119,18 @@ fun MainScreen(
                 )
             }
 
-            composable("artists") { ArtistsView() }
-            composable("collectors") { CollectorsView() }
-            composable("songs") { SongsView() }
+            composable("artists") {
+                viewIndex = 2
+                ArtistsView()
+            }
+            composable("collectors") {
+                viewIndex = 3
+                CollectorsView(collectorViewModel = CollectorViewModel())
+            }
+            composable("songs") {
+                viewIndex = 4
+                SongsView()
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.frontvynils.network
 
 import com.example.frontvynils.models.Album
+import com.example.frontvynils.models.Collector
+
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -17,4 +19,7 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("albums")
     suspend fun createAlbum(@Body album: Album): Album
+
+    @GET("collectors")
+    suspend fun getAllCollectors(): List<Collector>
 }

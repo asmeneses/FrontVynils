@@ -19,7 +19,6 @@ class AlbumViewModel(private val repository: IAlbumRepository, albumId: Int) : V
     init {
         viewModelScope.launch {
             _isLoading.value = true
-
             try {
                 _album.value = repository.getAlbum(albumId = albumId)
             } catch (e: Exception) {

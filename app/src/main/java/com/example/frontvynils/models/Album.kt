@@ -24,7 +24,7 @@ enum class RecordLabel(val description: String) {
 }
 
 data class Album(
-    val id: Int,
+    val id: Int = -1,
     val name: String,
     val cover: String,
     var releaseDate: String,

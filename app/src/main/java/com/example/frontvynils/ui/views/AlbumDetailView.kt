@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -179,6 +180,7 @@ fun DoubleText(leftText: String, rightText: String) {
                 fontSize = TextUnit(value = 20F, type = TextUnitType.Sp),
                 fontWeight = FontWeight.ExtraBold,
                 text = leftText,
+                textAlign = TextAlign.End,
                 overflow = TextOverflow.Clip
             )
         }

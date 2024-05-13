@@ -25,9 +25,7 @@ class AlbumCreateViewModel(private val repository: IAlbumRepository) : ViewModel
 
             try {
                 _album.value = repository.createAlbum(album)
-                if (_album.value != null) {
-                    _hasSave.value = true
-                }
+                _hasSave.value = _album.value != null
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

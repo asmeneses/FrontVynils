@@ -1,6 +1,7 @@
 package com.example.frontvynils.ui.views
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -23,8 +26,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -56,8 +61,8 @@ fun AlbumCreateView(navController: NavController, model: AlbumCreateViewModel) {
     val albumNameState = remember { mutableStateOf(TextFieldValue()) }
     val recordDateState = remember { mutableStateOf(TextFieldValue()) }
     val launchDateState = remember { mutableStateOf(TextFieldValue()) }
-    val genreState = remember { mutableStateOf(TextFieldValue()) }
-    val producerState = remember { mutableStateOf(TextFieldValue()) }
+    val genreState = remember { mutableStateOf(String()) }
+    val recordLabelState = remember { mutableStateOf(String()) }
     val coverState = remember { mutableStateOf(TextFieldValue()) }
 
     Column(
@@ -109,8 +114,8 @@ fun AlbumCreateView(navController: NavController, model: AlbumCreateViewModel) {
         InputText(fieldName = "Artista", label = "Ingrese el nombre del artista", textFieldValue = albumNameState)
         InputText(fieldName = "Fecha Grabación", label = "Ingrese la fecha de grabación", textFieldValue = recordDateState)
         InputText(fieldName = "Fecha Lanzamiento", label = "Ingrese la fecha de lanzamiento", textFieldValue = launchDateState)
-        InputText(fieldName = "Género", label = "Ingrese el género", textFieldValue = genreState)
-        InputText(fieldName = "Productor", label = "Ingrese el productor", textFieldValue = producerState)
+        InputDropdown(fieldName = "Productor", label = "Seleccione el productor", options = listOf("Sony Music", "EMI", "Discos Fuentes", "Elektra", "Fania Records"), selectedOption = recordLabelState)
+        InputDropdown(fieldName = "Género", label = "Seleccione el género", options = listOf("Classical", "Salsa", "Rock", "Folk"), selectedOption = genreState)
         InputText(fieldName = "Carátula", label = "Ingrese el enlace a la carátula", textFieldValue = coverState)
 
         if (album != null) {
@@ -129,21 +134,13 @@ fun AlbumCreateView(navController: NavController, model: AlbumCreateViewModel) {
                 Button(
                     onClick = {
                         model.save(
-                            // album = Album(
-                            //     name = albumNameState.value.text,
-                            //     cover = coverState.value.text,
-                            //     releaseDate = launchDateState.value.text,
-                            //     description = "No description",
-                            //     genre = genreState.value.text,
-                            //     recordLabel = launchDateState.value.text
-                            // ),
                             album = Album(
-                                name = "1234",
-                                cover = "https://f4.bcbits.com/img/a1873419779_16.jpg",
-                                releaseDate = "1234-12-12",
-                                description = "Empty description",
-                                genre = "Salsa",
-                                recordLabel = "1234"
+                                name = albumNameState.value.text,
+                                cover = coverState.value.text,
+                                releaseDate = launchDateState.value.text,
+                                description = "No description",
+                                genre = genreState.value,
+                                recordLabel = recordLabelState.value
                             )
                         )
                     },
@@ -208,3 +205,69 @@ fun InputText(fieldName: String, label: String, textFieldValue: MutableState<Tex
         }
     }
 }
+
+@Composable
+fun InputDropdown(
+    fieldName: String,
+    label: String,
+    options: List<String>,
+    selectedOption: MutableState<String>
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Row(modifier = Modifier.padding(vertical = 10.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(vertical = 16.5.dp, horizontal = 20.dp)
+                .weight(0.7F),
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(
+                color = Color(0XFFD0C0A7),
+                fontSize = TextUnit(value = 20F, type = TextUnitType.Sp),
+                fontWeight = FontWeight.ExtraBold,
+                text = fieldName,
+                textAlign = TextAlign.End,
+                overflow = TextOverflow.Clip,
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(end = 10.dp)
+                .weight(1F),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Box(
+                modifier = Modifier.clickable(onClick = { expanded = true }),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Box(
+                    modifier = Modifier
+                        .background(color = Color(217, 217, 217), shape = RoundedCornerShape(8.dp))
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                ) {
+                    Text(
+                        text = if (selectedOption.value.isEmpty()) label else selectedOption.value,
+                        color = if (selectedOption.value.isEmpty()) Color.DarkGray else Color.Black
+                    )
+                }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    options.forEach { option ->
+                        DropdownMenuItem(onClick = {
+                            selectedOption.value = option
+                            expanded = false
+                        }) {
+                            Text(text = option)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

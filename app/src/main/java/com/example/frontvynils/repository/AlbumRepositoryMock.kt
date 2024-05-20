@@ -6,7 +6,7 @@ class AlbumRepositoryMock : IAlbumRepository {
     override suspend fun getAlbums(): List<Album> {
         return listOf(
             Album(
-                id = 0,
+                id = 1,
                 name = "Buscando América",
                 cover = "https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg",
                 releaseDate = "1984-08-01T05:00:00.000Z",
@@ -21,9 +21,9 @@ class AlbumRepositoryMock : IAlbumRepository {
         )
     }
 
-    override suspend fun getAlbum(albumId: Int): Album? {
+    override suspend fun getAlbum(id: Int): Album? {
         return Album(
-            id = 0,
+            id = id,
             name = "Buscando América",
             cover = "https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg",
             releaseDate = "1984-08-01T05:00:00.000Z",

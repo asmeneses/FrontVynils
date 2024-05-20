@@ -14,7 +14,7 @@ interface ApiService {
     suspend fun getAlbums(): List<Album>
 
     @GET("albums/{id}")
-    suspend fun getAlbum(@Path("id") albumId: Int): Album
+    suspend fun getAlbum(@Path("id") id: Int): Album
 
     @Headers("Content-Type: application/json")
     @POST("albums")
@@ -22,4 +22,7 @@ interface ApiService {
 
     @GET("collectors")
     suspend fun getAllCollectors(): List<Collector>
+
+    @GET("collectors/{id}")
+    suspend fun getCollector(@Path("id") id: Int): Collector
 }

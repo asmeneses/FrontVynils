@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class Collector(
     @SerializedName("id")
     @Expose(serialize = false, deserialize = true)
-    val id: Int,
+    val id: Int? = null,
 
     @SerializedName("name")
     val name: String,

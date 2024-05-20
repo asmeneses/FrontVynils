@@ -15,4 +15,13 @@ class CollectorRepository() : ICollectorRepository {
             emptyList()
         }
     }
+
+    override suspend fun getCollector(id: Int): Collector? {
+        return try {
+            api.getCollector(id)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

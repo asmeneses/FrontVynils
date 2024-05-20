@@ -9,4 +9,13 @@ class CollectorRepositoryMock : ICollectorRepository {
             Collector(2, "Mario Rios", "12345678", "mariorios@gmail.com")
         )
     }
+
+    override suspend fun getCollector(id: Int): Collector? {
+        return Collector(
+            id = id,
+            name = "Mario Rios",
+            email = "mari@gmail.com",
+            telephone = "1234567"
+        )
+    }
 }

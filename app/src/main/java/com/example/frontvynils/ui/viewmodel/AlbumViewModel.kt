@@ -28,7 +28,7 @@ class AlbumViewModel(private val repository: IAlbumRepository, id: Int) : ViewMo
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _album.value = repository.getAlbum(albumId = id)
+                _album.value = repository.getAlbum(id = id)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

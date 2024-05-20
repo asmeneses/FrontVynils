@@ -16,9 +16,9 @@ class AlbumRepository : IAlbumRepository {
         }
     }
 
-    override suspend fun getAlbum(albumId: Int): Album? {
+    override suspend fun getAlbum(id: Int): Album? {
         return try {
-            api.getAlbum(albumId)
+            api.getAlbum(id)
         } catch (e: Exception) {
             e.printStackTrace()
             null

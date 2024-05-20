@@ -28,6 +28,7 @@ import com.example.frontvynils.ui.views.*
 var albumViewModel: AlbumViewModel? = null
 var albumsViewModel: AlbumsViewModel? = null
 
+var collectorViewModel: CollectorViewModel? = null
 var collectorsViewModel: CollectorsViewModel? = null
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -59,7 +60,7 @@ fun MainScreen(
             Button(
                 onClick = {
                     when (viewIndex) {
-                        1 -> navController.navigate("createAlbum")
+                        1 -> navController.navigate("addAlbum")
                     }
                 },
                 colors = MainButtonColors
@@ -79,9 +80,10 @@ fun MainScreen(
             }
 
             composable(
-                route = "albums/{albumId}",
-                arguments = listOf(navArgument("albumId") { type = NavType.IntType })) { it ->
-                var id = it.arguments?.getInt("albumId")!!
+                route = "albums/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { it ->
+                var id = it.arguments?.getInt("id")!!
 
                 if (albumViewModel == null) {
                     albumViewModel = AlbumViewModel(albumRepository, id)
@@ -90,7 +92,7 @@ fun MainScreen(
                 AlbumView(navController = navController, id = id, albumViewModel = albumViewModel!!)
             }
 
-            composable(route = "createAlbum") {
+            composable(route = "addAlbum") {
                 AlbumCreateView(
                     navController = navController,
                     model = AlbumCreateViewModel(albumRepository)
@@ -101,6 +103,7 @@ fun MainScreen(
                 viewIndex = 2
                 ArtistsView()
             }
+
             composable("collectors") {
                 viewIndex = 3
 
@@ -108,8 +111,25 @@ fun MainScreen(
                     collectorsViewModel = CollectorsViewModel(collectorRepository)
                 }
 
-                CollectorsView(collectorsViewModel = collectorsViewModel!!)
+                CollectorsView(
+                    navController = navController,
+                    collectorsViewModel = collectorsViewModel!!
+                )
             }
+            
+            composable(
+                route = "collectors/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) {
+                var id = it.arguments?.getInt("id")!!
+                
+                if (collectorViewModel == null) {
+                    collectorViewModel = CollectorViewModel(collectorRepository, id)
+                }
+                
+                CollectorView(navController = navController, id = id, collectorViewModel = collectorViewModel!!)
+            }
+
             composable("songs") {
                 viewIndex = 4
                 SongsView()
@@ -161,7 +181,8 @@ fun MenuItem(text: String, isSelected: Boolean, onClick: () -> Unit) {
             .padding(4.dp)
             .background(
                 color = if (isSelected) MainColor else Color.White,
-                shape = RoundedCornerShape(percent = 50))
+                shape = RoundedCornerShape(percent = 50)
+            )
             .clickable(onClick = onClick)
             .semantics { testTag = text },
     ) {

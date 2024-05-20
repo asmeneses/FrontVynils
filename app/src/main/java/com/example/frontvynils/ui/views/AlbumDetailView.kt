@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -38,7 +39,9 @@ import com.example.frontvynils.ui.theme.MainColor
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
 
 @Composable
-fun AlbumView(navController: NavController, albumViewModel: AlbumViewModel) {
+fun AlbumView(navController: NavController, id: Int, albumViewModel: AlbumViewModel) {
+    albumViewModel.reload(id)
+
     val album = albumViewModel.album.value
     val isLoading = albumViewModel.isLoading.value
 
@@ -179,6 +182,7 @@ fun DoubleText(leftText: String, rightText: String) {
                 fontSize = TextUnit(value = 20F, type = TextUnitType.Sp),
                 fontWeight = FontWeight.ExtraBold,
                 text = leftText,
+                textAlign = TextAlign.End,
                 overflow = TextOverflow.Clip
             )
         }

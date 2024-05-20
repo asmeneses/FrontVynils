@@ -36,4 +36,8 @@ class AlbumRepositoryMock : IAlbumRepository {
             recordLabel = "Elektra",
         )
     }
+
+    override suspend fun postAlbum(album: Album): Album? {
+        return album
+    }
 }

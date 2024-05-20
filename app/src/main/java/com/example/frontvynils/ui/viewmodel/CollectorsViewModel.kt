@@ -4,13 +4,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.frontvynils.models.Collector
-import com.example.frontvynils.network.RetrofitInstance
-import com.example.frontvynils.repository.CollectorRepository
+import com.example.frontvynils.repository.ICollectorRepository
 import kotlinx.coroutines.launch
 
-class CollectorViewModel : ViewModel() {
-    private val repository = CollectorRepository(RetrofitInstance.api)
-
+class CollectorsViewModel(private val repository: ICollectorRepository) : ViewModel() {
     var collectors = mutableStateOf<List<Collector>>(listOf())
         private set
 

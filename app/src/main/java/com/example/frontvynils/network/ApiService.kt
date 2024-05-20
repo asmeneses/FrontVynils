@@ -18,7 +18,7 @@ interface ApiService {
 
     @Headers("Content-Type: application/json")
     @POST("albums")
-    suspend fun createAlbum(@Body album: Album): Album
+    suspend fun postAlbum(@Body album: Album): Album
 
     @GET("collectors")
     suspend fun getAllCollectors(): List<Collector>

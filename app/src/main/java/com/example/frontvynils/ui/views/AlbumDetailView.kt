@@ -39,7 +39,9 @@ import com.example.frontvynils.ui.theme.MainColor
 import com.example.frontvynils.ui.viewmodel.AlbumViewModel
 
 @Composable
-fun AlbumView(navController: NavController, albumViewModel: AlbumViewModel) {
+fun AlbumView(navController: NavController, id: Int, albumViewModel: AlbumViewModel) {
+    albumViewModel.reload(id)
+
     val album = albumViewModel.album.value
     val isLoading = albumViewModel.isLoading.value
 

@@ -2,8 +2,11 @@ package com.example.frontvynils.repository
 
 import com.example.frontvynils.models.Album
 import com.example.frontvynils.network.ApiService
+import com.example.frontvynils.network.RetrofitInstance
 
-class AlbumRepository(private val api: ApiService) : IAlbumRepository {
+class AlbumRepository : IAlbumRepository {
+    private val api: ApiService = RetrofitInstance.api
+
     override suspend fun getAlbums(): List<Album> {
         return try {
             api.getAlbums()
@@ -22,9 +25,9 @@ class AlbumRepository(private val api: ApiService) : IAlbumRepository {
         }
     }
 
-    override suspend fun createAlbum(album: Album): Album? {
+    override suspend fun postAlbum(album: Album): Album? {
         return try {
-            api.createAlbum(album)
+            api.postAlbum(album)
         } catch (e: Exception) {
             e.printStackTrace()
             null

@@ -1,17 +1,10 @@
 package com.example.frontvynils
 
-import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-import com.example.frontvynils.repository.AlbumRepositoryMock
+import com.example.frontvynils.repository.*
 import com.example.frontvynils.ui.navigation.MainScreen
-import org.junit.Before
-import org.junit.FixMethodOrder
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runners.MethodSorters
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -23,7 +16,10 @@ class AlbumViewTest {
     @Before
     fun init() {
         composeTestRule.setContent {
-            MainScreen(albumRepository = AlbumRepositoryMock())
+            MainScreen(
+                albumRepository = AlbumRepositoryMock(),
+                collectorRepository = CollectorRepositoryMock()
+            )
         }
     }
 

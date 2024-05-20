@@ -9,7 +9,7 @@ import com.example.frontvynils.repository.IAlbumRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class AlbumViewModel(private val repository: IAlbumRepository, albumId: Int) : ViewModel() {
+class AlbumViewModel(private val repository: IAlbumRepository, id: Int) : ViewModel() {
     private val _album = mutableStateOf<Album?>(null)
     private val _isLoading = mutableStateOf(true)
 
@@ -17,10 +17,18 @@ class AlbumViewModel(private val repository: IAlbumRepository, albumId: Int) : V
     val isLoading: State<Boolean> = _isLoading
 
     init {
+        reload(id)
+    }
+
+    fun reload(id: Int) {
+        if (_album.value != null && _album.value!!.id == id) {
+            return
+        }
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                _album.value = repository.getAlbum(albumId = albumId)
+                _album.value = repository.getAlbum(albumId = id)
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

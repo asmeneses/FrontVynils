@@ -37,7 +37,7 @@ class AlbumRepositoryMock : IAlbumRepository {
         )
     }
 
-    override suspend fun createAlbum(album: Album): Album? {
+    override suspend fun postAlbum(album: Album): Album? {
         return album
     }
 }

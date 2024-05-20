@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.frontvynils.models.Album
 import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
 
 @Composable
@@ -37,10 +36,11 @@ fun AlbumsView(navController: NavController, albumsViewModel: AlbumsViewModel) {
         modifier = Modifier.padding(top = 70.dp, bottom = 75.dp)
     ) {
         items(albums) { album ->
-            AlbumItem(
-                album,
+            GridItem(
+                album.name,
+                album.cover,
                 onClick = {
-                    navController.navigate("albums/${album.id}")
+                    navController.navigate("albums/${album.id!!}")
                 }
             )
         }
@@ -48,7 +48,7 @@ fun AlbumsView(navController: NavController, albumsViewModel: AlbumsViewModel) {
 }
 
 @Composable
-fun AlbumItem(album: Album, onClick: () -> Unit) {
+fun GridItem(name: String, cover: String, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(10.dp)
@@ -56,15 +56,15 @@ fun AlbumItem(album: Album, onClick: () -> Unit) {
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = album.cover,
-            contentDescription = album.name,
+            model = cover,
+            contentDescription = name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .heightIn(min = 150.dp, max = 150.dp)
         )
 
         Text(
-            text = album.name,
+            text = name,
             fontSize = 18.sp,
             color = Color.White,
             textAlign = TextAlign.Center,

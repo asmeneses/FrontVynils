@@ -1,64 +1,40 @@
 package com.example.frontvynils.ui.navigation
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.AddCircle
-import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.*
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.Button
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.unit.*
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import androidx.navigation.navArgument
-import com.example.frontvynils.repository.IAlbumRepository
-import com.example.frontvynils.ui.theme.MainButtonColors
-import com.example.frontvynils.ui.theme.MainColor
-import com.example.frontvynils.ui.viewmodel.AlbumCreateViewModel
-import com.example.frontvynils.ui.viewmodel.AlbumViewModel
-import com.example.frontvynils.ui.viewmodel.CollectorViewModel
-import com.example.frontvynils.ui.viewmodel.AlbumsViewModel
-import com.example.frontvynils.ui.views.AlbumCreateView
-import com.example.frontvynils.ui.views.AlbumView
-import com.example.frontvynils.ui.views.AlbumsView
-import com.example.frontvynils.ui.views.ArtistsView
-import com.example.frontvynils.ui.views.CollectorsView
-import com.example.frontvynils.ui.views.SongsView
+import com.example.frontvynils.repository.*
+import com.example.frontvynils.ui.theme.*
+import com.example.frontvynils.ui.viewmodel.*
+import com.example.frontvynils.ui.views.*
+
+var albumViewModel: AlbumViewModel? = null
+var albumsViewModel: AlbumsViewModel? = null
+
+var collectorsViewModel: CollectorsViewModel? = null
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    albumRepository: IAlbumRepository
+    albumRepository: IAlbumRepository,
+    collectorRepository: ICollectorRepository
 ) {
     val navController = rememberNavController()
     var viewIndex = 1
@@ -93,23 +69,25 @@ fun MainScreen(
         }
 
         NavHost(navController, startDestination = "albums") {
-            var albumsViewModel = AlbumsViewModel(albumRepository)
-
             composable(route = "albums") {
                 viewIndex = 1
-                AlbumsView(navController, albumsViewModel = albumsViewModel)
+                if (albumsViewModel == null) {
+                    albumsViewModel = AlbumsViewModel(albumRepository)
+                }
+
+                AlbumsView(navController, albumsViewModel = albumsViewModel!!)
             }
 
             composable(
                 route = "albums/{albumId}",
-                arguments = listOf(navArgument("albumId") { type = NavType.IntType })) {
-                AlbumView(
-                    navController = navController,
-                    albumViewModel = AlbumViewModel(
-                        albumRepository,
-                        it.arguments?.getInt("albumId")!!
-                    )
-                )
+                arguments = listOf(navArgument("albumId") { type = NavType.IntType })) { it ->
+                var id = it.arguments?.getInt("albumId")!!
+
+                if (albumViewModel == null) {
+                    albumViewModel = AlbumViewModel(albumRepository, id)
+                }
+
+                AlbumView(navController = navController, id = id, albumViewModel = albumViewModel!!)
             }
 
             composable(route = "createAlbum") {
@@ -125,7 +103,12 @@ fun MainScreen(
             }
             composable("collectors") {
                 viewIndex = 3
-                CollectorsView(collectorViewModel = CollectorViewModel())
+
+                if (collectorsViewModel == null) {
+                    collectorsViewModel = CollectorsViewModel(collectorRepository)
+                }
+
+                CollectorsView(collectorsViewModel = collectorsViewModel!!)
             }
             composable("songs") {
                 viewIndex = 4
@@ -176,11 +159,11 @@ fun MenuItem(text: String, isSelected: Boolean, onClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .padding(4.dp)
-            .clickable(onClick = onClick)
             .background(
                 color = if (isSelected) MainColor else Color.White,
-                shape = RoundedCornerShape(percent = 50)
-            ),
+                shape = RoundedCornerShape(percent = 50))
+            .clickable(onClick = onClick)
+            .semantics { testTag = text },
     ) {
         Icon(
             Icons.Rounded.AddCircle,

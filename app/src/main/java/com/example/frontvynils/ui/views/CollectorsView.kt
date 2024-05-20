@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -16,15 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.frontvynils.models.Collector
-import com.example.frontvynils.ui.viewmodel.CollectorViewModel
+import com.example.frontvynils.ui.viewmodel.CollectorsViewModel
 
 @Composable
-fun CollectorsView(collectorViewModel: CollectorViewModel) {
-    val collectors = collectorViewModel.collectors.value
+fun CollectorsView(collectorsViewModel: CollectorsViewModel) {
+    val collectors = collectorsViewModel.collectors.value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(1),
@@ -65,24 +63,3 @@ fun CollectorItem(collector: Collector) {
         }
     }
 }
-
-/*@Composable
-fun CollectorItem(collector: Collector) {
-    Column(
-        modifier = Modifier
-            .padding(10.dp)
-            .width(150.dp)
-    ) {
-        Text(
-            text = collector.name,
-            fontSize = 18.sp,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-            softWrap = false,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 2.dp)
-        )
-    }
-}*/

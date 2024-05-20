@@ -1,34 +1,28 @@
 package com.example.frontvynils.models
 
-enum class Genre(val description: String) {
-    CLASSICAL("Classical"),
-    SALSA("Salsa"),
-    ROCK("Rock"),
-    FOLK("Folk");
-
-    companion object {
-        fun fromDescription(desc: String): Genre? = values().find { it.description == desc }
-    }
-}
-
-enum class RecordLabel(val description: String) {
-    SONY("Sony Music"),
-    EMI("EMI"),
-    FUENTES("Discos Fuentes"),
-    ELEKTRA("Elektra"),
-    FANIA("Fania Records");
-
-    companion object {
-        fun fromDescription(desc: String): RecordLabel? = values().find { it.description == desc }
-    }
-}
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 data class Album(
-    val id: Int = -1,
+    @SerializedName("id")
+    @Expose(serialize = false, deserialize = true)
+    val id: Int? = null,
+
+    @SerializedName("name")
     val name: String,
+
+    @SerializedName("cover")
     val cover: String,
+
+    @SerializedName("releaseDate")
     var releaseDate: String,
+
+    @SerializedName("description")
     var description: String,
+
+    @SerializedName("genre")
     var genre: String,
+
+    @SerializedName("recordLabel")
     val recordLabel: String
 )

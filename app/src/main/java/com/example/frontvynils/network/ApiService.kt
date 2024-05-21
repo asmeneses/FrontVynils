@@ -2,6 +2,7 @@ package com.example.frontvynils.network
 
 import com.example.frontvynils.models.Album
 import com.example.frontvynils.models.Collector
+import com.example.frontvynils.models.Musician
 
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,4 +26,19 @@ interface ApiService {
 
     @GET("collectors/{id}")
     suspend fun getCollector(@Path("id") id: Int): Collector
+
+    @Headers("Content-Type: application/json")
+    @POST("collectors")
+    suspend fun postCollector(@Body collector: Collector): Collector
+
+    @GET("musicians")
+    suspend fun getAllMusicians(): List<Musician>
+
+    @GET("musicians/{id}")
+    suspend fun getMusician(@Path("id") id: Int): Musician
+
+    @Headers("Content-Type: application/json")
+    @POST("musicians")
+    suspend fun postMusician(@Body musician: Musician): Musician
 }
+

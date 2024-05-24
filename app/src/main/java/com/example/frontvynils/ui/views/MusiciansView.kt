@@ -40,7 +40,7 @@ fun MusiciansView(navController: NavController, musiciansViewModel: MusiciansVie
                 musician.name,
                 musician.image,
                 onClick = {
-                    navController.navigate("musicians/${musician.id!!}")
+                    // TODO: Navigate to "artists/${musician.id!!}"
                 }
             )
         }

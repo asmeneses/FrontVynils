@@ -29,7 +29,7 @@ class MusiciansViewTest {
         test_1_navigateToArtistsView()
         Thread.sleep(1000)
 
-        var node = composeTestRule.onNodeWithText("Steven taylor")
+        var node = composeTestRule.onNodeWithText("Steven Taylor")
 
         composeTestRule.waitUntil {
             node.isDisplayed()

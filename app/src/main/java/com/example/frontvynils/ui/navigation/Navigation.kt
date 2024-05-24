@@ -122,7 +122,7 @@ fun MainScreen(
                     musicianViewModel = MusicianViewModel(musicianRepository, id)
                 }
 
-                AlbumView(navController = navController, id = id, albumViewModel = albumViewModel!!)
+                // TODO: Create Musician View
             }
 
             composable("collectors") {

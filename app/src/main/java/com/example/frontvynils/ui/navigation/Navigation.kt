@@ -5,10 +5,9 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
 import androidx.compose.material.icons.*
 import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.Button
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
@@ -34,6 +33,15 @@ var collectorsViewModel: CollectorsViewModel? = null
 var musicianViewModel: MusicianViewModel? = null
 var musiciansViewModel: MusiciansViewModel? = null
 
+enum class NavigationView {
+    ALBUMS,
+    ALBUM_DETAIL,
+    ARTIST,
+    COLLECTORS,
+    COLLECTOR_DETAIL,
+    SONGS
+}
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
@@ -42,121 +50,127 @@ fun MainScreen(
     musicianRepository: IMusicianRepository
 ) {
     val navController = rememberNavController()
-    var viewIndex = 1
+    var navigationView: NavigationView = NavigationView.ALBUMS
 
     Scaffold(
         bottomBar = { MenuBar(navController) },
-        backgroundColor = MainColor
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            Arrangement.SpaceBetween,
-        ) {
-            Button(
-                onClick = { },
-                colors = MainButtonColors
+        containerColor = MainColor,
+        content = { innerPadding ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .consumeWindowInsets(innerPadding),
+                Arrangement.SpaceBetween,
             ) {
-                Icon(Icons.Rounded.Search, contentDescription = "")
+                Button(
+                    onClick = { },
+                    colors = MainButtonColors
+                ) {
+                    Icon(Icons.Rounded.Search, contentDescription = "")
+                }
+
+                Button(
+                    onClick = {
+                        when (navigationView) {
+                            NavigationView.ALBUMS -> navController.navigate("addAlbum")
+                            else -> {}
+                        }
+                    },
+                    colors = MainButtonColors
+                ) {
+                    Icon(Icons.Rounded.Add, contentDescription = "")
+                }
             }
 
-            Button(
-                onClick = {
-                    when (viewIndex) {
-                        1 -> navController.navigate("addAlbum")
+            NavHost(navController, startDestination = "albums") {
+                composable(route = "albums") {
+                    navigationView = NavigationView.ALBUMS
+
+                    if (albumsViewModel == null) {
+                        albumsViewModel = AlbumsViewModel(albumRepository)
                     }
-                },
-                colors = MainButtonColors
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = "")
-            }
-        }
 
-        NavHost(navController, startDestination = "albums") {
-            composable(route = "albums") {
-                viewIndex = 1
-                if (albumsViewModel == null) {
-                    albumsViewModel = AlbumsViewModel(albumRepository)
+                    AlbumsView(navController, albumsViewModel = albumsViewModel!!)
                 }
 
-                AlbumsView(navController, albumsViewModel = albumsViewModel!!)
-            }
+                composable(
+                    route = "albums/{id}",
+                    arguments = listOf(navArgument("id") { type = NavType.IntType })
+                ) { it ->
+                    var id = it.arguments?.getInt("id")!!
 
-            composable(
-                route = "albums/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
-            ) { it ->
-                var id = it.arguments?.getInt("id")!!
+                    if (albumViewModel == null) {
+                        albumViewModel = AlbumViewModel(albumRepository, id)
+                    }
 
-                if (albumViewModel == null) {
-                    albumViewModel = AlbumViewModel(albumRepository, id)
+                    AlbumView(navController = navController, id = id, albumViewModel = albumViewModel!!)
                 }
 
-                AlbumView(navController = navController, id = id, albumViewModel = albumViewModel!!)
-            }
-
-            composable(route = "addAlbum") {
-                AlbumCreateView(
-                    navController = navController,
-                    model = AlbumCreateViewModel(albumRepository)
-                )
-            }
-
-            composable(route = "artists") {
-                viewIndex = 1
-                if (musiciansViewModel == null) {
-                    musiciansViewModel = MusiciansViewModel(musicianRepository)
+                composable(route = "addAlbum") {
+                    AlbumCreateView(
+                        navController = navController,
+                        model = AlbumCreateViewModel(albumRepository)
+                    )
                 }
 
-                MusiciansView(navController, musiciansViewModel = musiciansViewModel!!)
-            }
+                composable(route = "artists") {
+                    navigationView = NavigationView.ARTIST
 
-            composable(
-                route = "artists/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
-            ) { it ->
-                var id = it.arguments?.getInt("id")!!
+                    if (musiciansViewModel == null) {
+                        musiciansViewModel = MusiciansViewModel(musicianRepository)
+                    }
 
-                if (musicianViewModel == null) {
-                    musicianViewModel = MusicianViewModel(musicianRepository, id)
+                    MusiciansView(navController, musiciansViewModel = musiciansViewModel!!)
                 }
 
-                // TODO: Create Musician View
-            }
+                composable(
+                    route = "artists/{id}",
+                    arguments = listOf(navArgument("id") { type = NavType.IntType })
+                ) { it ->
+                    var id = it.arguments?.getInt("id")!!
 
-            composable("collectors") {
-                viewIndex = 3
+                    if (musicianViewModel == null) {
+                        musicianViewModel = MusicianViewModel(musicianRepository, id)
+                    }
 
-                if (collectorsViewModel == null) {
-                    collectorsViewModel = CollectorsViewModel(collectorRepository)
+                    // TODO: Create Musician View
                 }
 
-                CollectorsView(
-                    navController = navController,
-                    collectorsViewModel = collectorsViewModel!!
-                )
-            }
-            
-            composable(
-                route = "collectors/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
-            ) {
-                var id = it.arguments?.getInt("id")!!
-                
-                if (collectorViewModel == null) {
-                    collectorViewModel = CollectorViewModel(collectorRepository, id)
+                composable("collectors") {
+                    navigationView = NavigationView.COLLECTORS
+
+                    if (collectorsViewModel == null) {
+                        collectorsViewModel = CollectorsViewModel(collectorRepository)
+                    }
+
+                    CollectorsView(
+                        navController = navController,
+                        collectorsViewModel = collectorsViewModel!!
+                    )
                 }
                 
-                CollectorView(navController = navController, id = id, collectorViewModel = collectorViewModel!!)
-            }
+                composable(
+                    route = "collectors/{id}",
+                    arguments = listOf(navArgument("id") { type = NavType.IntType })
+                ) {
+                    var id = it.arguments?.getInt("id")!!
+                    
+                    if (collectorViewModel == null) {
+                        collectorViewModel = CollectorViewModel(collectorRepository, id)
+                    }
+                    
+                    CollectorView(navController = navController, id = id, collectorViewModel = collectorViewModel!!)
+                }
 
-            composable("songs") {
-                viewIndex = 4
-                SongsView()
+                composable("songs") {
+                    navigationView = NavigationView.SONGS
+
+                    SongsView()
+                }
             }
         }
-    }
+    )
 }
 
 @Composable

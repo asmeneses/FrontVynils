@@ -16,12 +16,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -252,12 +252,15 @@ fun InputDropdown(
                     onDismissRequest = { expanded = false }
                 ) {
                     options.forEach { option ->
-                        DropdownMenuItem(onClick = {
-                            selectedOption.value = option
-                            expanded = false
-                        }) {
-                            Text(text = option)
-                        }
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = option)
+                            },
+                            onClick = {
+                                selectedOption.value = option
+                                expanded = false
+                            }
+                        )
                     }
                 }
             }

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.frontvynils.models.Album
+import com.example.frontvynils.ui.navigation.albumsViewModel
 import com.example.frontvynils.ui.theme.AlbumsPrimaryColor
 import com.example.frontvynils.ui.theme.MainColor
 import com.example.frontvynils.ui.theme.textFieldColor
@@ -113,6 +114,7 @@ fun AlbumCreateView(navController: NavController, model: AlbumCreateViewModel) {
         InputText(fieldName = "Carátula", label = "Ingrese el enlace a la carátula", textFieldValue = coverState)
 
         if (album != null) {
+            albumsViewModel!!.reload()
             navController.navigate("albums")
         } else if (isSaving) {
             CircularProgressIndicator()

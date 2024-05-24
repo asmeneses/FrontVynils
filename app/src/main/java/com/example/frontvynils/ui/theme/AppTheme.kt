@@ -14,7 +14,7 @@ var MainButtonColors = ButtonColors(
     disabledContentColor = Color.Black
 )
 
-var AlbumsPrimaryColor = Color(0XFF6798DB)
+var AlbumsPrimaryColor = Color(0xFF416DA8)
 
 var inputFieldBackgroundColor = Color(0XFFD9D9D9)
 

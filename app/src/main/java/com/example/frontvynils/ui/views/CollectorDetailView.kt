@@ -48,7 +48,7 @@ fun CollectorView(navController: NavController, id: Int, collectorViewModel: Col
                     )
             ) {
                 Text(
-                    text = "Detalle Album",
+                    text = "Detalle Coleccionista",
                     fontSize = TextUnit(value = 18f, type = TextUnitType.Sp),
                     modifier = Modifier
                         .padding(ButtonDefaults.ContentPadding)

@@ -24,6 +24,8 @@ import com.example.frontvynils.ui.theme.*
 import com.example.frontvynils.ui.viewmodel.*
 import com.example.frontvynils.ui.views.*
 
+// Caching de los views, para optimizar memoria
+// y llamados a la API
 var albumViewModel: AlbumViewModel? = null
 var albumsViewModel: AlbumsViewModel? = null
 

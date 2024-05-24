@@ -172,6 +172,7 @@ fun DoubleText(leftText: String, rightText: String) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
+                color = Color(0xFFCFCFDD),
                 fontSize = TextUnit(value = 20f, type = TextUnitType.Sp),
                 fontWeight = FontWeight.ExtraBold,
                 text = rightText,

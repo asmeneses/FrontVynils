@@ -12,6 +12,10 @@ class AlbumsViewModel(private val repository : IAlbumRepository) : ViewModel() {
     private set
 
     init {
+        reload()
+    }
+
+    fun reload() {
         viewModelScope.launch {
             albums.value = repository.getAlbums()
         }

@@ -31,11 +31,15 @@ var albumsViewModel: AlbumsViewModel? = null
 var collectorViewModel: CollectorViewModel? = null
 var collectorsViewModel: CollectorsViewModel? = null
 
+var musicianViewModel: MusicianViewModel? = null
+var musiciansViewModel: MusiciansViewModel? = null
+
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
     albumRepository: IAlbumRepository,
-    collectorRepository: ICollectorRepository
+    collectorRepository: ICollectorRepository,
+    musicianRepository: IMusicianRepository
 ) {
     val navController = rememberNavController()
     var viewIndex = 1
@@ -99,9 +103,26 @@ fun MainScreen(
                 )
             }
 
-            composable("artists") {
-                viewIndex = 2
-                ArtistsView()
+            composable(route = "artists") {
+                viewIndex = 1
+                if (musiciansViewModel == null) {
+                    musiciansViewModel = MusiciansViewModel(musicianRepository)
+                }
+
+                MusiciansView(navController, musiciansViewModel = musiciansViewModel!!)
+            }
+
+            composable(
+                route = "artists/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { it ->
+                var id = it.arguments?.getInt("id")!!
+
+                if (musicianViewModel == null) {
+                    musicianViewModel = MusicianViewModel(musicianRepository, id)
+                }
+
+                // TODO: Create Musician View
             }
 
             composable("collectors") {

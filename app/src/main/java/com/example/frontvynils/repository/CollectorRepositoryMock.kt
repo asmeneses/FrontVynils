@@ -1,5 +1,6 @@
 package com.example.frontvynils.repository
 
+import com.example.frontvynils.models.Album
 import com.example.frontvynils.models.Collector
 
 class CollectorRepositoryMock : ICollectorRepository {
@@ -17,5 +18,9 @@ class CollectorRepositoryMock : ICollectorRepository {
             email = "mari@gmail.com",
             telephone = "1234567"
         )
+    }
+
+    override suspend fun postCollector(collector: Collector): Collector? {
+        return collector
     }
 }

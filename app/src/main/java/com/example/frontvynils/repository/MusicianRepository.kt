@@ -1,34 +1,33 @@
 package com.example.frontvynils.repository
 
-import com.example.frontvynils.models.Album
-import com.example.frontvynils.models.Collector
+import com.example.frontvynils.models.Musician
 import com.example.frontvynils.network.ApiService
 import com.example.frontvynils.network.RetrofitInstance
 
-class CollectorRepository() : ICollectorRepository {
+class MusicianRepository() : IMusicianRepository {
     private val api: ApiService = RetrofitInstance.api
 
-    override suspend fun getCollectors(): List<Collector> {
+    override suspend fun getMusicians(): List<Musician> {
         return try {
-            api.getAllCollectors()
+            api.getAllMusicians()
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()
         }
     }
 
-    override suspend fun getCollector(id: Int): Collector? {
+    override suspend fun getMusician(id: Int): Musician? {
         return try {
-            api.getCollector(id)
+            api.getMusician(id)
         } catch (e: Exception) {
             e.printStackTrace()
             null
         }
     }
 
-    override suspend fun postCollector(collector: Collector): Collector? {
+    override suspend fun postMusician(musician: Musician): Musician? {
         return try {
-            api.postCollector(collector)
+            api.postMusician(musician)
         } catch (e: Exception) {
             e.printStackTrace()
             null

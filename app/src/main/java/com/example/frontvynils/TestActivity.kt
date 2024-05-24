@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.frontvynils.repository.AlbumRepositoryMock
 import com.example.frontvynils.repository.CollectorRepositoryMock
+import com.example.frontvynils.repository.MusicianRepositoryMock
 import com.example.frontvynils.ui.navigation.MainScreen
 
 class TestActivity : ComponentActivity() {
@@ -13,7 +14,8 @@ class TestActivity : ComponentActivity() {
         setContent {
             MainScreen(
                 albumRepository = AlbumRepositoryMock(),
-                collectorRepository = CollectorRepositoryMock()
+                collectorRepository = CollectorRepositoryMock(),
+                musicianRepository = MusicianRepositoryMock()
             )
         }
     }

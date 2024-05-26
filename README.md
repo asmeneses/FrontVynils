@@ -25,4 +25,6 @@ Android API nivel 8 (Android Oreo).
 - Andersen Castañeda
 - Alex Meneses
 - Andres Rivera
-- Eduardo Castro
+
+## Documentation
+[Enlace a la Wiki](https://github.com/asmeneses/FrontVynils/wiki)
